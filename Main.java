@@ -4,59 +4,57 @@ import java.util.*;
 import java.io.*;
 
 // idk if we need these in this file or if we need to have a separate JavaFX application file
-//import javafx.application.Application;
-//import javafx.stage.Stage;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 class Main {
 	// main method
 	public static void main(String[] args) {
 		// main list of Patient objects to store all of our data
 		ArrayList<Patient> patientList = new ArrayList<Patient>();
+		loadData(patientList);
 	}
 
 	// other methods
 	// IDK WHAT RETURN TYPE EACH HAS, WE CAN CHANGE IF NEED BE
-	public void loadData() {
-		BufferedReader read = null;
-	
-		try {   
-			// Create Buffer reader object to read cvs file 
-			read = new BufferedReader(new FileReader("input.cvs"));
-			String readlines;
-			while ((readlines = read.readLine()) != null) {
-				readlines = read.readLine();
-				if (readlines == null) {
-					break;
-				}
-				//Read from cvs file 
-				String[] lineValues = readlines.split(","); //split the string on this value into array
-				String idInt = lineValues[0];
-				String lastName = lineValues[1];
-				String firstName = lineValues[2];
-				String type = lineValues[3];
-				String date = lineValues[4];
-				String country = lineValues[5];
+	public static void loadData(ArrayList<Patient> patientList) {
+		// console scanner
+		Scanner in = new Scanner(System.in);
 
-				//Convert ID to int 
-				int ID = Integer.parseInt(idInt);
-				//Check this because it might be becasue it is LocalDate type
-				//Patient patient = new Patient(ID, firstName, lastName, type, date, country);
+		System.out.println("Enter filepath to CSV file:");
+
+		try {
+			File myFile = new File(in.nextLine());
+			Scanner fileInput = new Scanner(myFile);
+
+			// the first line of the file is just the title of each column
+			String line = fileInput.nextLine();
+
+			while (fileInput.hasNextLine()) {
+				Patient newPatient = new Patient();
+
+				line = fileInput.nextLine();
+
+				Scanner lineScanner = new Scanner(line);
+
+				lineScanner.useDelimiter(",");
+				newPatient.setID(lineScanner.nextInt());
+				newPatient.setFirstName(lineScanner.next());
+				newPatient.setLastName(lineScanner.next());
+				newPatient.setType(lineScanner.next());
+				newPatient.setDate(lineScanner.next());
+				newPatient.setCountry(lineScanner.next());
+
+				patientList.add(newPatient);
 			}
+		} catch (FileNotFoundException e) {
+			System.out.println("That file does not exist.");
 		}
-			
-			catch (FileNotFoundException e) {
-			e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (read != null) {
-					try {
-						read.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+
+		for (Patient patient : patientList) {
+			System.out.printf("%d,%s,%s,%s,%s,%s%n", patient.getID(), patient.getFirstName(), patient.getLastName(), patient.getType(), patient.getDate(), patient.getCountry());
+		}
+
 	}
 
 	public void addData(ArrayList<Patient> patientList) {
