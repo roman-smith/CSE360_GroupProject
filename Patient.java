@@ -7,7 +7,7 @@ public class Patient {
 	private String firstName;
 	private String lastName;
 	private String type; // MIGHT want to convert this to enum but I don't think so as of rn
-	private LocalDate date; // using the java.time.LocalDate class -- can probably just use string if you prefer
+	private String date; // using the java.time.LocalDate class -- can probably just use string if you prefer
 	private String country; // is called 'location' in the slides but country is more specific
 
 	// unparameterized constructor
@@ -16,12 +16,12 @@ public class Patient {
 		this.firstName = "";
 		this.lastName = "";
 		this.type = "";
-		this.date = null;
+		this.date = "";
 		this.country = "";
 	}
 
 	// parameterized constructor
-	public Patient(int ID, String firstName, String lastName, String type, LocalDate date, String country) {
+	public Patient(int ID, String firstName, String lastName, String type, String date, String country) {
 		this.ID = ID;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -62,11 +62,11 @@ public class Patient {
 		this.type = type;
 	}
 
-	public LocalDate getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
