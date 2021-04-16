@@ -4,15 +4,14 @@ import java.util.*;
 import java.io.*;
 
 // idk if we need these in this file or if we need to have a separate JavaFX application file
-import javafx.application.Application;
-import javafx.stage.Stage;
+//import javafx.application.Application;
+//import javafx.stage.Stage;
 
 class Main {
 	// main method
 	public static void main(String[] args) {
 		// main list of Patient objects to store all of our data
 		ArrayList<Patient> patientList = new ArrayList<Patient>();
-		loadData(patientList);
 	}
 
 	// other methods
@@ -61,8 +60,22 @@ class Main {
 
 	}
 
-	public void saveData(ArrayList<Patient> patientList) {
-
+	// saveData: Save all the information in the application table to a cvs file
+	// Right now it doesn't have the button jet, only creates a csv file 
+	public static void saveData(ArrayList<Patient> patientList) {
+		//Name of Document
+		String csvName = "data.txt";
+		File csvFile = new File(csvName);
+		//Create csv file 
+		try (PrintWriter csvWriter = new PrintWriter(new FileWriter(csvFile));){
+		//Write in data items in patientList
+		for(Patient items : patientList){
+			csvWriter.println(items);
+		}
+		} catch (IOException e) {
+			//Handle exception
+			e.printStackTrace();
+		}
 	}
 
 	public void visualizeData(ArrayList<Patient> patientList) {
