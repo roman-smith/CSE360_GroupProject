@@ -56,7 +56,29 @@ class Main {
 
 	}
 
-	public void addData(ArrayList<Patient> patientList) {
+	
+	/*
+	public void actionPerformed(ActionEvent e, ArrayList<Patient> patientList ) {
+		String date = dateText.getText();
+		int ID = idText.getText();
+		String lastName = lastText.getText();
+		String firstName = firstText.getText();
+		String VacType = vTypeText.getText();
+		String VacDate = vDateText.getText();
+		String VacLocation = vLocation.getText();
+		
+		Patient newPatient = new Patient();
+		newPatient.setID(ID);
+		newPatient.setFirstName(firstName);
+		newPatient.setLastName(lastName);
+		newPatient.setType(VacType);
+		newPatient.setDate(VacDate);
+		newPatient.setCountry(VacLocation);
+		
+		patientList.add(newPatient);
+	}
+	*/
+	public void addData(ArrayList<Patient> patientList) { //the code above can be put toegether with a button to add data
 
 	}
 
