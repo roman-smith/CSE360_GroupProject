@@ -3,9 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package guiProject;
+
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -14,13 +18,17 @@ import javax.swing.JOptionPane;
  * @author Kevin
  */
 public class loadFrame extends javax.swing.JFrame {
+    static ArrayList<Patient> patientList;
 
     private final JFileChooser openFileChooser;
     /**
      * Creates new form loadFrame
      */
-    public loadFrame() {
+    public loadFrame(ArrayList<Patient> patientList) {
         initComponents();
+
+        loadFrame.patientList = patientList;
+        writeTable();
         
         setTitle("COVID-19 Vaccination Data");
         this.setLocationRelativeTo(null);
@@ -46,6 +54,7 @@ public class loadFrame extends javax.swing.JFrame {
         dataScroll = new javax.swing.JScrollPane();
         dataTable = new javax.swing.JTable();
         importButton = new javax.swing.JButton();
+        dtm = new javax.swing.table.DefaultTableModel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -66,28 +75,22 @@ public class loadFrame extends javax.swing.JFrame {
         });
 
         saveButton.setText("Save Data");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         graphicsButton.setText("Visualize Data");
 
-        dataTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
-            },
-            new String [] {
-                "ID", "Last Name", "First Name", "Vaccine Type", "Vaccination Date", "Vaccine Location"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
-            };
+        String header[] = new String[] {
+            "ID", "Last Name", "First Name", "Vaccine Type", "Vaccination Date", "Vaccine Location"
+        };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
+        dtm.setColumnIdentifiers(header);
+
+        dataTable.setModel(dtm);
+
         dataScroll.setViewportView(dataTable);
 
         importButton.setText("Import...");
@@ -171,14 +174,68 @@ public class loadFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-        new addFrame().setVisible(true);
+        new addFrame(patientList).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_addButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        new saveData(patientList);
+    }
+
+    private void writeTable() {
+        for(int i = 0; i < patientList.size(); i++) {
+            dtm.addRow(new Object[] {
+                patientList.get(i).getID(),
+                patientList.get(i).getFirstName(),
+                patientList.get(i).getLastName(),
+                patientList.get(i).getType(),
+                patientList.get(i).getDate(),
+                patientList.get(i).getCountry()
+            }); 
+        }
+    }
 
     private void importButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_importButtonActionPerformed
         int returnValue = openFileChooser.showOpenDialog(this);
         
         if (returnValue == JFileChooser.APPROVE_OPTION){
+            try {
+                File myFile = openFileChooser.getSelectedFile();
+                myFile.getAbsolutePath();
+
+                Scanner fileInput = new Scanner(myFile);
+    
+                // the first line of the file is just the title of each column
+                String line = fileInput.nextLine();
+    
+                while (fileInput.hasNextLine()) {
+                    Patient newPatient = new Patient();
+    
+                    line = fileInput.nextLine();
+    
+                    Scanner lineScanner = new Scanner(line);
+    
+                    lineScanner.useDelimiter(",");
+                    newPatient.setID(lineScanner.nextInt());
+                    newPatient.setFirstName(lineScanner.next());
+                    newPatient.setLastName(lineScanner.next());
+                    newPatient.setType(lineScanner.next());
+                    newPatient.setDate(lineScanner.next());
+                    newPatient.setCountry(lineScanner.next());
+    
+                    patientList.add(newPatient);
+                    
+                    // close lineScanner
+                    lineScanner.close();
+                }
+
+                fileInput.close();
+
+                writeTable();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("That file does not exist.");
+            }
         }
         else{
         }
@@ -214,7 +271,7 @@ public class loadFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new loadFrame().setVisible(true);
+                new loadFrame(patientList).setVisible(true);
             }
         });
     }
@@ -230,5 +287,6 @@ public class loadFrame extends javax.swing.JFrame {
     private javax.swing.JButton loadButton;
     private javax.swing.JPanel mainPanel;
     private javax.swing.JButton saveButton;
+    private javax.swing.table.DefaultTableModel dtm;
     // End of variables declaration//GEN-END:variables
 }
