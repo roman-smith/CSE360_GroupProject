@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package guiProject;
+
+
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -12,12 +14,15 @@ import javax.swing.JOptionPane;
  * @author Kevin
  */
 public class covidframe extends javax.swing.JFrame {
+    static ArrayList<Patient> patientList;
 
     /**
      * Creates new form covidframe
      */
     public covidframe() {
         initComponents();
+
+        covidframe.patientList = new ArrayList<Patient>();
         
         this.setLocationRelativeTo(null);
     }
@@ -64,6 +69,11 @@ public class covidframe extends javax.swing.JFrame {
         });
 
         saveButton.setText("Save Data");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         graphicsButton.setText("Visualize Data");
 
@@ -133,14 +143,18 @@ public class covidframe extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutButtonActionPerformed
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-    new addFrame().setVisible(true);
+    new addFrame(patientList).setVisible(true);
     this.setVisible(false);
     }//GEN-LAST:event_addButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        new loadFrame().setVisible(true);
+        new loadFrame(patientList).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        new saveData(patientList);
+    }
 
     /**
      * @param args the command line arguments
