@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package guiProject;
+
+
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -12,12 +14,15 @@ import javax.swing.JOptionPane;
  * @author Kevin
  */
 public class addFrame extends javax.swing.JFrame {
+    static ArrayList<Patient> patientList;
 
     /**
      * Creates new form addFrame
      */
-    public addFrame() {
+    public addFrame(ArrayList<Patient> patientList) {
         initComponents();
+
+        addFrame.patientList = patientList;
         
         this.setLocationRelativeTo(null);
     }
@@ -38,14 +43,12 @@ public class addFrame extends javax.swing.JFrame {
         saveButton = new javax.swing.JButton();
         graphicsButton = new javax.swing.JButton();
         infoPanel = new javax.swing.JPanel();
-        dateLabel = new javax.swing.JLabel();
         idLabel = new javax.swing.JLabel();
         lastLabel = new javax.swing.JLabel();
         firstLabel = new javax.swing.JLabel();
         vTypeLabel = new javax.swing.JLabel();
         vDateLabel = new javax.swing.JLabel();
         vLocationLabel = new javax.swing.JLabel();
-        dateText = new javax.swing.JTextField();
         idText = new javax.swing.JTextField();
         firstText = new javax.swing.JTextField();
         lastText = new javax.swing.JTextField();
@@ -74,13 +77,15 @@ public class addFrame extends javax.swing.JFrame {
         addButton.setText("Add Data");
 
         saveButton.setText("Save Data");
+        saveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                saveButtonActionPerformed(evt);
+            }
+        });
 
         graphicsButton.setText("Visualize Data");
 
         infoPanel.setToolTipText("");
-
-        dateLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        dateLabel.setText("Date:");
 
         idLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         idLabel.setText("ID:");
@@ -119,11 +124,9 @@ public class addFrame extends javax.swing.JFrame {
                     .addComponent(vDateLabel)
                     .addComponent(vTypeLabel)
                     .addComponent(firstLabel)
-                    .addComponent(lastLabel)
-                    .addComponent(dateLabel))
+                    .addComponent(lastLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(firstText, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lastText, javax.swing.GroupLayout.PREFERRED_SIZE, 249, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -140,10 +143,6 @@ public class addFrame extends javax.swing.JFrame {
             infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(infoPanelLayout.createSequentialGroup()
                 .addGap(70, 70, 70)
-                .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dateText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(dateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(infoPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(idLabel)
                     .addComponent(idText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -227,13 +226,27 @@ public class addFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_aboutButtonActionPerformed
 
     private void acceptButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_acceptButtonActionPerformed
+        Patient newPatient = new Patient();
+        newPatient.setID(Integer.parseInt(idText.getText()));
+        newPatient.setFirstName(firstText.getText());
+        newPatient.setLastName(lastText.getText());
+        newPatient.setType(vTypeText.getText());
+        newPatient.setDate(vDateText.getText());
+        newPatient.setCountry(vLocationText.getText());
+
+        patientList.add(newPatient);
+
         JOptionPane.showMessageDialog(this, "Successfully added Data");
     }//GEN-LAST:event_acceptButtonActionPerformed
 
     private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
-        new loadFrame().setVisible(true);
+        new loadFrame(patientList).setVisible(true);
         this.setVisible(false);
     }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        new saveData(patientList);
+    }
 
     /**
      * @param args the command line arguments
@@ -265,7 +278,7 @@ public class addFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new addFrame().setVisible(true);
+                new addFrame(patientList).setVisible(true);
             }
         });
     }
@@ -274,8 +287,6 @@ public class addFrame extends javax.swing.JFrame {
     private javax.swing.JButton aboutButton;
     private javax.swing.JButton acceptButton;
     private javax.swing.JButton addButton;
-    private javax.swing.JLabel dateLabel;
-    private javax.swing.JTextField dateText;
     private javax.swing.JLabel firstLabel;
     private javax.swing.JTextField firstText;
     private javax.swing.JButton graphicsButton;
