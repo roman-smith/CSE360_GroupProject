@@ -6,7 +6,17 @@
 
 import java.util.ArrayList;
 
+import java.awt.Color;
 import javax.swing.JOptionPane;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartFrame;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PiePlot3D;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 /**
  *
@@ -181,11 +191,34 @@ public class visualizeFrame extends javax.swing.JFrame {
     }
 
     private void barButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_barButtonActionPerformed
-        // TODO add your handling code here:
+        DefaultCategoryDataset data = new DefaultCategoryDataset();
+        data.setValue(78, "Pfizer","Pfizer");
+        data.setValue(98, "Moderna","Moderna");
+        data.setValue(38, "J&J","J&J");
+        
+        JFreeChart chart = ChartFactory.createBarChart("Vaccination Data", "Vaccine Name", "Vaccinations", data, PlotOrientation.VERTICAL, true, true, false);
+        CategoryPlot plot = chart.getCategoryPlot();
+        plot.setRangeGridlinePaint(Color.black);
+        
+        ChartFrame chartFrame = new ChartFrame("Vaccination Data",chart,true);
+        chartFrame.setVisible(true);
+        chartFrame.setLocationRelativeTo(infoPanel);
+        chartFrame.setSize(800,600);
     }//GEN-LAST:event_barButtonActionPerformed
 
     private void pieButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pieButtonActionPerformed
-        // TODO add your handling code here:
+        DefaultPieDataset data = new DefaultPieDataset();
+        data.setValue("Moderna", 98);
+        data.setValue("Pfizer", 78);
+        data.setValue("J&J", 38);
+        
+        JFreeChart chart = ChartFactory.createPieChart("Vaccination Data", data, true, true, false);
+        
+        PiePlot piePlot = (PiePlot) chart.getPlot();
+        ChartFrame chartFrame = new ChartFrame("Vaccination Data",chart);
+        chartFrame.setVisible(true);
+        chartFrame.setLocationRelativeTo(infoPanel);
+        chartFrame.setSize(500,400);
     }//GEN-LAST:event_pieButtonActionPerformed
 
     /**
